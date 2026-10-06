@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: event-lead-manager-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: leadmanager
+      POSTGRES_PASSWORD: leadmanager_password
+      POSTGRES_DB: event_lead_manager
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
