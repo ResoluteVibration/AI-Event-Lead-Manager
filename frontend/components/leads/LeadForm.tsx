@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type {
   LeadCreateData,
-//   LeadUpdateData,
+  LeadUpdateData,
 } from "@/lib/api";
 
 interface LeadFormProps {
@@ -11,7 +11,7 @@ interface LeadFormProps {
   submitLabel?: string;
   loading?: boolean;
   onSubmit: (
-    data: LeadCreateData
+    data: LeadCreateData | LeadUpdateData
   ) => Promise<void>;
 }
 
@@ -54,14 +54,11 @@ export default function LeadForm({
     e: React.FormEvent<HTMLFormElement>
   ) {
     e.preventDefault();
-
     setError("");
-
     if (!name.trim()) {
       setError("Name is required.");
       return;
     }
-
     if (!company.trim()) {
       setError("Company is required.");
       return;

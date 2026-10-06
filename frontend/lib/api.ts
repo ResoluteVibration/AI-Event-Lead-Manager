@@ -170,3 +170,67 @@ export async function deleteLead(
     throw new Error("Failed to delete lead");
   }
 }
+
+export interface AIResponse {
+  result: string;
+}
+
+export async function generateLeadSummary(
+  lead: Lead
+): Promise<string> {
+  const response = await fetch(
+    `${API_URL}/api/ai/summarize`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: lead.name,
+        company: lead.company,
+        email: lead.email,
+        event: lead.event,
+        notes: lead.notes,
+        follow_up_status: lead.follow_up_status,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Unable to generate AI summary.");
+  }
+
+  const data: AIResponse = await response.json();
+
+  return data.result;
+}
+
+export async function generateLeadFollowUp(
+  lead: Lead
+): Promise<string> {
+  const response = await fetch(
+    `${API_URL}/api/ai/follow-up`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: lead.name,
+        company: lead.company,
+        email: lead.email,
+        event: lead.event,
+        notes: lead.notes,
+        follow_up_status: lead.follow_up_status,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Unable to generate follow-up.");
+  }
+
+  const data: AIResponse = await response.json();
+
+  return data.result;
+}

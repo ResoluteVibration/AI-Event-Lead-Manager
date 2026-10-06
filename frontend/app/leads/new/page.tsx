@@ -7,6 +7,7 @@ import LeadForm from "@/components/leads/LeadForm";
 import {
   createLead,
   type LeadCreateData,
+  type LeadUpdateData,
 } from "@/lib/api";
 
 export default function NewLeadPage() {
@@ -15,17 +16,37 @@ export default function NewLeadPage() {
   const [loading, setLoading] =
     useState(false);
 
-  async function handleCreate(data: LeadCreateData) {
-    setLoading(true);
-
-    try {
-      const lead = await createLead(data);
-
-      router.push(`/leads/${lead.id}`);
-    } finally {
-      setLoading(false);
-    }
+  async function handleCreate(
+  data: LeadCreateData | LeadUpdateData
+) {
+  if (
+    !data.name ||
+    !data.company ||
+    !data.email ||
+    !data.event ||
+    !data.notes
+  ) {
+    return;
   }
+
+  setLoading(true);
+
+  try {
+    const lead = await createLead({
+      name: data.name,
+      company: data.company,
+      email: data.email,
+      event: data.event,
+      notes: data.notes,
+      follow_up_status:
+        data.follow_up_status ?? "PENDING",
+    });
+
+    router.push(`/leads/${lead.id}`);
+  } finally {
+    setLoading(false);
+  }
+}
 
   return (
     <main className="min-h-screen bg-gray-50">
